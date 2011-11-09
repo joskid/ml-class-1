@@ -63,10 +63,12 @@ Theta2_grad = zeros(size(Theta2));
 %
 
 % Forward propagation
-a0 = [ones(m, 1) X];
-a2 = sigmoid(a0*Theta1');
+a1 = [ones(m, 1) X];
+z2 = a1*Theta1';
+a2 = sigmoid(z2);
 a2 = [ones(m,1) a2];
-a3 = sigmoid(a2*Theta2');
+z3 = a2*Theta2';
+a3 = sigmoid(z3);
 H = a3; % H is the matrix of hyposesis for all training samples given Theta 1/2
 
 Y = zeros(m, num_labels);
@@ -82,7 +84,17 @@ th2 = Theta2(:,2:end);
 
 J = J + lambda * (sum(sum(th1 .* th1)) + sum(sum(th2 .* th2))) / (2 * m);
 
+% Computing deltas for the gradient
+delta3 = a3 - Y;
+delta2 = delta3 * Theta2(:,2:end) .* sigmoidGradient(z2);
 
+D2 = delta3' * a2;
+D1 = delta2' * a1;
+
+reg_theta2 = lambda * [zeros(size(Theta2,1),1), Theta2(:,2:end)];
+reg_theta1 = lambda * [zeros(size(Theta1,1),1), Theta1(:,2:end)];
+Theta2_grad = (D2 + reg_theta2) ./ m;
+Theta1_grad = (D1 + reg_theta1) ./ m;
 % -------------------------------------------------------------
 
 % =========================================================================
