@@ -62,22 +62,25 @@ Theta2_grad = zeros(size(Theta2));
 %               and Theta2_grad from Part 2.
 %
 
+% Forward propagation
+a0 = [ones(m, 1) X];
+a2 = sigmoid(a0*Theta1');
+a2 = [ones(m,1) a2];
+a3 = sigmoid(a2*Theta2');
+H = a3; % H is the matrix of hyposesis for all training samples given Theta 1/2
 
+Y = zeros(m, num_labels);
+for i = 1:m
+  Y(i,y(i)) = 1;
+end
 
+J = 1/m * sum(sum(-Y .* log(H) - (1-Y) .* log(1 - H)));
 
+% Computing regularization values from Thetas 
+th1 = Theta1(:,2:end);
+th2 = Theta2(:,2:end);
 
-
-
-
-
-
-
-
-
-
-
-
-
+J = J + lambda * (sum(sum(th1 .* th1)) + sum(sum(th2 .* th2))) / (2 * m);
 
 
 % -------------------------------------------------------------
