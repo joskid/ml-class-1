@@ -71,10 +71,7 @@ z3 = a2*Theta2';
 a3 = sigmoid(z3);
 H = a3; % H is the matrix of hyposesis for all training samples given Theta 1/2
 
-Y = zeros(m, num_labels);
-for i = 1:m
-  Y(i,y(i)) = 1;
-end
+Y = eye(num_labels)(y,:); % matrix of training outputs y in vectorized format
 
 J = 1/m * sum(sum(-Y .* log(H) - (1-Y) .* log(1 - H)));
 
